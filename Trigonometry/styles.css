@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: black;
+}
+
+#myCanvas {
+  background-color: white;
+}
+
+#chartCanvas {
+  background-color: white;
+}
