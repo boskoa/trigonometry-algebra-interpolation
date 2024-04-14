@@ -10,4 +10,5 @@ body {
 
 #chartCanvas {
   background-color: white;
+  display: block;
 }

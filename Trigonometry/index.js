@@ -65,7 +65,7 @@ function drawLine(m, n, color = "coral") {
 }
 
 function movePoint(e) {
-  theta -= Math.sign(e.deltaY);
+  theta -= toRad(Math.sign(e.deltaY));
 
   b.x = Math.cos(theta) * distanceC;
   b.y = Math.sin(theta) * distanceC;
@@ -90,6 +90,10 @@ function toDeg(rad) {
   return (rad * 180) / Math.PI;
 }
 
+function toRad(deg) {
+  return (deg * Math.PI) / 180;
+}
+
 function update() {
   /*
   const distanceA = distance(b, c);
@@ -100,23 +104,28 @@ function update() {
   const cos = Math.cos(theta);
   const tan = Math.tan(theta);
 
+  const t = {
+    x: Math.sign(cos) * Math.hypot(1, tan) * distanceC,
+    y: 0,
+  };
+
   ctx.clearRect(-offset.x, -offset.y, offset.x * 2, offset.y * 2);
   drawCoordSystem(ctx, offset);
 
   drawText(
-    "sin = a/c = " + sin.toFixed(2),
+    "sin = " + sin.toFixed(2),
     { x: -offset.x * 0.5, y: offset.y * 0.7 },
     "red"
   );
 
   drawText(
-    "cos = b/c = " + cos.toFixed(2),
+    "cos = " + cos.toFixed(2),
     { x: -offset.x * 0.5, y: offset.y * 0.8 },
     "blue"
   );
 
   drawText(
-    "tan = a/b = " + tan.toFixed(2),
+    "tan = " + tan.toFixed(2),
     { x: -offset.x * 0.5, y: offset.y * 0.9 },
     "magenta"
   );
@@ -128,27 +137,33 @@ function update() {
   );
 
   drawLine(a, b, "black");
-  drawText("c", average(a, b), "black");
+  drawText("1", average(a, b), "black");
   drawLine(a, c, "blue");
-  drawText("b", average(a, c), "blue");
+  drawText("cos", average(a, c), "blue");
   drawLine(b, c, "red");
-  drawText("a", average(b, c), "red");
+  drawText("sin", average(b, c), "red");
 
   drawText("θ", a, "black");
+
+  drawLine(b, t, "magenta");
+  drawText("tan", average(b, t), "magenta");
 
   ctx.beginPath();
   ctx.strokeStyle = "black";
   ctx.lineWidth = 2;
+  /*
   const start = b.x > a.x ? 0 : Math.PI;
   const clockwise = (b.y < c.y) ^ (b.x > a.x);
   let end = b.y < c.y ? -theta : theta;
   if (b.x < a.x) {
     end = Math.PI - end;
   }
-  ctx.arc(0, 0, 20, start, end, !clockwise);
+  */
+  //ctx.arc(0, 0, 20, start, end, !clockwise);
+  ctx.arc(0, 0, distanceC, 0, theta, theta < 0);
   ctx.stroke();
 
-  const chartScaler = chartOffset.y;
+  const chartScaler = chartOffset.y * 0.5;
   // sin
   drawPoint(
     chartCtx,
@@ -183,7 +198,7 @@ function update() {
 drawCoordSystem(chartCtx, chartOffset);
 
 update();
-document.addEventListener("onwheel", movePoint);
+document.addEventListener("wheel", movePoint);
 
 /*
 sine: ratio of the side opposite of the angle and the hypotenuse.
